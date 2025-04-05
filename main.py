@@ -7,6 +7,7 @@ import os
 import re
 import aiohttp
 import json
+from typing import List
 
 @register("astrbot_plugin_custom_menu", "Futureppo", "自定义图片菜单。更新前记得备份你的图片！！！", "1.0.0")
 class custommenu(Star):
@@ -42,30 +43,36 @@ class custommenu(Star):
             logger.warning(f"menu文件夹中没有找到任何图片: {menu_dir}")
             return
 
-        nodes_list = []
-        for idx, path in enumerate(image_paths):
-            if not os.path.exists(path):
-                logger.info(f"图片不存在: {path}")
-                continue
+        # 每次发送的最大图片数量
+        batch_size = 100
 
-            # 创建伪造的用户信息
-            # 咕咕咕   qq_number = f"10000{idx}"  # 伪造的QQ号
-            nickname = f"菜单"  # 伪造的昵称
+        # 分批处理图片
+        for i in range(0, len(image_paths), batch_size):
+            batch_paths = image_paths[i:i + batch_size]
+            nodes_list = []
 
-            # 加载图片
-            image = Image.fromFileSystem(path)
-            logger.debug(f"成功加载图片: {path}")
+            for idx, path in enumerate(batch_paths):
+                if not os.path.exists(path):
+                    logger.info(f"图片不存在: {path}")
+                    continue
 
-            # 创建节点
-            node = Node(
-                # uin=int(qq_number),
-                name=nickname,
-                content=[image]
-            )
-            nodes_list.append(node)
-        # 发送
-        if nodes_list:
-            nodes = Nodes(nodes=nodes_list)
-            yield event.chain_result([nodes])
-        else:
-            yield event.plain_result("发送失败，请检查menu文件夹中的图片。")
+                # 创建伪造的用户信息
+                nickname = f"菜单"  # 伪造的昵称
+
+                # 加载图片
+                image = Image.fromFileSystem(path)
+                logger.debug(f"成功加载图片: {path}")
+
+                # 创建节点
+                node = Node(
+                    name=nickname,
+                    content=[image]
+                )
+                nodes_list.append(node)
+
+            # 发送当前批次的图片
+            if nodes_list:
+                nodes = Nodes(nodes=nodes_list)
+                yield event.chain_result([nodes])
+            else:
+                yield event.plain_result("发送失败，请检查menu文件夹中的图片。")

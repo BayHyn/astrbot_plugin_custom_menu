@@ -1,6 +1,6 @@
 name: astrbot_plugin_custom_menu # 这是你的插件的唯一识别名。
 desc: 自定义图片菜单。 # 插件简短描述
 help: 发送命令菜单，帮助，功能，你有什么功能，你怎么用，查看机器人菜单。需要自己在menu文件夹放入图片 # 插件的帮助信息
-version: v2.0.0 # 插件版本号。格式：v1.1.1 或者 v1.1
+version: v2.0.1 # 插件版本号。格式：v1.1.1 或者 v1.1
 author: Futureppo # 作者
 repo: https://github.com/Futureppo/astrbot_plugin_custom_menu # 插件的仓库地址
