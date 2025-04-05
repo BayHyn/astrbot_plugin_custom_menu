@@ -56,14 +56,13 @@ class custommenu(Star):
                     logger.info(f"图片不存在: {path}")
                     continue
 
-                # 创建伪造的用户信息
-                nickname = f"菜单"  # 伪造的昵称
+                # 合并转发外显内容
+                nickname = f"菜单" 
 
                 # 加载图片
                 image = Image.fromFileSystem(path)
                 logger.debug(f"成功加载图片: {path}")
 
-                # 创建节点
                 node = Node(
                     name=nickname,
                     content=[image]
