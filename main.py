@@ -8,11 +8,23 @@ from astrbot.api.message_components import *
 from astrbot.api.star import Context, Star, register
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 
-@register("astrbot_plugin_custom_menu", "Futureppo", "自定义图片菜单。", "v2.0.2")
+@register(
+    "astrbot_plugin_custom_menu", 
+    "Futureppo", 
+    "自定义图片菜单。", 
+    "v2.0.2"
+)
+
 class custommenu(Star):
     def __init__(self, context: Context):
         super().__init__(context)
 
+    @filter.permission_type(filter.PermissionType.ADMIN)
+    @filter.command("添加菜单图片")
+    async def custommenu(self, event: AstrMessageEvent):
+        yield event.plain_result("请发送要添加的图片")
+   
+    
     @filter.command("菜单", alias=['帮助', '功能', '你怎么用'])  # 可以自行添加指令
     async def custommenu(self, event: AstrMessageEvent):
         base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -59,8 +71,6 @@ class custommenu(Star):
 
                 # 合并转发外显内容
                 nickname = f"菜单" 
-
-                # 加载图片
                 image = Image.fromFileSystem(path)
                 logger.debug(f"成功加载图片: {path}")
 
