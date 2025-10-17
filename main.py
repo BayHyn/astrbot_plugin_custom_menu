@@ -69,7 +69,6 @@ class custommenu(Star):
                     logger.info(f"图片不存在: {path}")
                     continue
 
-                # 合并转发外显内容
                 nickname = f"菜单" 
                 image = Image.fromFileSystem(path)
                 logger.debug(f"成功加载图片: {path}")
