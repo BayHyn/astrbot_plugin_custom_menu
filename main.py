@@ -9,7 +9,7 @@ import aiohttp
 import json
 from typing import List
 
-@register("astrbot_plugin_custom_menu", "Futureppo", "自定义图片菜单。更新前记得备份你的图片！！！", "1.0.0")
+@register("astrbot_plugin_custom_menu", "Futureppo", "自定义图片菜单。", "v2.0.2")
 class custommenu(Star):
     def __init__(self, context: Context):
         super().__init__(context)
@@ -18,21 +18,23 @@ class custommenu(Star):
     async def custommenu(self, event: AstrMessageEvent):
         base_dir = os.path.dirname(os.path.abspath(__file__))
 
-        # 菜单文件夹路径
-        menu_dir = os.path.join(base_dir, "menu")
+
+        repo_root = os.path.abspath(os.path.join(base_dir, os.pardir, os.pardir, os.pardir))
+        data_dir = os.path.join(repo_root, "data")
+        menu_dir = os.path.join(data_dir, "menu")
 
         # 检查并创建菜单文件夹
         if not os.path.exists(menu_dir) or not os.path.isdir(menu_dir):
-            logger.info(f"menu文件夹不存在或不是一个有效的目录，尝试创建: {menu_dir}")
+            logger.debug(f"menu文件夹不存在或不是一个有效的目录，尝试创建: {menu_dir}")
             try:
-                os.makedirs(menu_dir, exist_ok=True)  # 自动创建目录
-                logger.info(f"menu文件夹已成功创建: {menu_dir}")
+                os.makedirs(menu_dir, exist_ok=True)  
+                logger.debug(f"menu文件夹已成功创建: {menu_dir}")
             except Exception as e:
                 logger.error(f"无法创建menu文件夹: {menu_dir}, 错误信息: {e}")
                 return
 
         # 获取菜单文件夹中的所有图片文件
-        image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']  # 支持的图片扩展名
+        image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'] 
         image_paths = [
             os.path.join(menu_dir, f)
             for f in os.listdir(menu_dir)
@@ -74,4 +76,4 @@ class custommenu(Star):
                 nodes = Nodes(nodes=nodes_list)
                 yield event.chain_result([nodes])
             else:
-                yield event.plain_result("发送失败，请检查menu文件夹中的图片。")
+                yield event.plain_result("发送失败，请检查data/menu文件夹中的图片。")
