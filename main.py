@@ -1,13 +1,12 @@
-from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
-from astrbot.api.star import Context, Star, register
-from astrbot.api import logger
-from astrbot.api.message_components import *
-from astrbot.api.event import filter, AstrMessageEvent
 import os
 import re
-import aiohttp
 import json
+import aiohttp
 from typing import List
+from astrbot.api import logger
+from astrbot.api.message_components import *
+from astrbot.api.star import Context, Star, register
+from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 
 @register("astrbot_plugin_custom_menu", "Futureppo", "自定义图片菜单。", "v2.0.2")
 class custommenu(Star):
